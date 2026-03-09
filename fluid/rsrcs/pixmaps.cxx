@@ -198,6 +198,7 @@ void loadPixmaps()
   pixmap[(int)Type::Slider] = tmp = new Fl_Pixmap(flSlider_xpm); tmp->scale(16, 16);
   pixmap[(int)Type::Scrollbar] = tmp = new Fl_Pixmap(flScrollBar_xpm); tmp->scale(16, 16);
   pixmap[(int)Type::Value_Slider] = tmp = new Fl_Pixmap(flValueSlider_xpm); tmp->scale(16, 16);
+  pixmap[(int)Type::Value_Range_Slider] = tmp = new Fl_Pixmap(flValueSlider_xpm); tmp->scale(16, 16);
   pixmap[(int)Type::Adjuster] = tmp = new Fl_Pixmap(flAdjuster_xpm); tmp->scale(16, 16);
   pixmap[(int)Type::Counter] = tmp = new Fl_Pixmap(flCounter_xpm); tmp->scale(16, 16);
 

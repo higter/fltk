@@ -74,6 +74,7 @@
 #include <FL/Fl_Text_Editor.H>
 #include <FL/Fl_Tree.H>
 #include <FL/Fl_Value_Slider.H>
+#include <FL/Fl_Value_Range_Slider.H>
 #include <FL/Fl_Value_Input.H>
 #include <FL/Fl_Value_Output.H>
 #include <FL/Fl_Window.H>
@@ -623,6 +624,36 @@ public:
 };
 
 Value_Slider_Node Value_Slider_Node::prototype;
+
+class Value_Range_Slider_Node : public Slider_Node
+{
+public:
+  typedef Slider_Node super;
+  static Value_Range_Slider_Node prototype;
+private:
+  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) override {
+    Fl_Value_Range_Slider *myo = (Fl_Value_Range_Slider*)(w==4 ? ((Widget_Node*)factory)->o : o);
+    switch (w) {
+      case 4:
+      case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
+      case 1: myo->textfont(f); break;
+      case 2: myo->textsize(s); break;
+      case 3: myo->textcolor(c); break;
+    }
+    return 1;
+  }
+public:
+  const char *type_name() override { return "Fl_Value_Range_Slider"; }
+  const char *alt_type_name() override { return "fltk::ValueRangeSlider"; }
+  Fl_Widget *widget(int x, int y, int w, int h) override {
+    return new Fl_Value_Range_Slider(x, y, w, h, "slider:");
+  }
+  Widget_Node *_make() override { return new Value_Range_Slider_Node(); }
+  Type type() const override { return Type::Value_Range_Slider; }
+  bool is_a(Type inType) const override { return (inType==Type::Value_Range_Slider) ? true : super::is_a(inType); }
+};
+
+Value_Range_Slider_Node Value_Range_Slider_Node::prototype;
 
 
 // ---- Value Input ----
@@ -1218,6 +1249,7 @@ static Node *known_types[] = {
   (Node*)&Slider_Node::prototype,
   (Node*)&Scrollbar_Node::prototype,
   (Node*)&Value_Slider_Node::prototype,
+  (Node*)&Value_Range_Slider_Node::prototype,
   (Node*)&Adjuster_Node::prototype,
   (Node*)&Counter_Node::prototype,
   (Node*)&Spinner_Node::prototype,
@@ -1483,6 +1515,7 @@ Fl_Menu_Item New_Menu[] = {
   {nullptr,0,cb,(void*)&Slider_Node::prototype},
   {nullptr,0,cb,(void*)&Scrollbar_Node::prototype},
   {nullptr,0,cb,(void*)&Value_Slider_Node::prototype},
+  {nullptr,0,cb,(void*)&Value_Range_Slider_Node::prototype},
   {nullptr,0,cb,(void*)&Adjuster_Node::prototype},
   {nullptr,0,cb,(void*)&Counter_Node::prototype},
   {nullptr,0,cb,(void*)&Spinner_Node::prototype},

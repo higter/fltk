@@ -117,6 +117,7 @@ set(CPPFILES
   Fl_Value_Input.cxx
   Fl_Value_Output.cxx
   Fl_Value_Slider.cxx
+  Fl_Value_Range_Slider.cxx
   Fl_Widget.cxx
   Fl_Widget_Surface.cxx
   Fl_Window.cxx

@@ -94,7 +94,7 @@ enum class Type {
   Button, Return_Button, Light_Button,
   Check_Button, Repeat_Button, Round_Button,
   // valuators
-  Slider, Scrollbar, Value_Slider,
+  Slider, Scrollbar, Value_Slider,Value_Range_Slider,
   Adjuster, Counter, Spinner,
   Dial, Roller, Value_Input, Value_Output,
   // text
