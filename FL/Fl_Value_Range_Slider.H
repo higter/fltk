@@ -21,6 +21,7 @@
 #define Fl_Value_Range_Slider_H
 
 #include "Fl_Slider.H"
+#include "Fl_Input.H"
 
 /**
   The Fl_Value_Slider widget is a Fl_Slider widget
@@ -35,8 +36,13 @@ class FL_EXPORT Fl_Value_Range_Slider : public Fl_Slider {
   short value_width_;
   short value_height_;
 
+  Fl_Input* min_value_;
+  Fl_Input* max_value_;
+
 protected:
   void draw() override;
+
+  int handle(int event, int X, int Y, int W, int H);
 
 public:
   int handle(int) override;
