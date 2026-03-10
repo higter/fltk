@@ -38,6 +38,8 @@ class FL_EXPORT Fl_Value_Range_Slider : public Fl_Slider {
 
   Fl_Input* min_value_;
   Fl_Input* max_value_;
+  double minValue_;
+  double maxValue_;
 
 protected:
   void draw() override;
@@ -122,6 +124,23 @@ public:
     \since 1.4.0
   */
   int value_height() const { return (value_height_); }
+
+  double min_value() const { return minValue_; }
+  double max_value() const { return maxValue_; }
+
+  void min_value(double val) {
+    minValue_ = val < minimum() ?  minimum() : (val > maxValue_ ? maxValue_ : val);  
+    min_value_->value(minValue_);
+  }
+
+  void max_value(double val) {
+    maxValue_ = val > maximum() ?  maximum() : (val < minValue_ ? minValue_ : val);  
+    max_value_->value(maxValue_);
+  }
+
+  void on_min_value_changed();
+
+  void on_max_value_changed();
 };
 
 #endif

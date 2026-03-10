@@ -20,6 +20,18 @@
 #include <FL/fl_draw.H>
 #include <math.h>
 
+
+void cb_min_value(Fl_Widget* o, void* data)
+{
+  Fl_Value_Range_Slider* widget = (Fl_Value_Range_Slider*)data;
+  widget->on_min_value_changed();
+}
+
+void cb_max_value(Fl_Widget* o, void* data)
+{
+  Fl_Value_Range_Slider* widget = (Fl_Value_Range_Slider*)data;
+  widget->on_max_value_changed();
+}
 /**
   Creates a new Fl_Value_Range_Slider widget using the given
   position, size, and label string. The default boxtype is FL_DOWN_BOX.
@@ -32,10 +44,28 @@ Fl_Value_Range_Slider::Fl_Value_Range_Slider(int X, int Y, int W, int H, const c
   textcolor_ = FL_FOREGROUND_COLOR;
   value_width_ = 35;
   value_height_ = 25;
+  minValue_ = minimum();
+  maxValue_ = maximum();
+
+
   min_value_ = new Fl_Input(0,0,0,0);
-  min_value_->value(minimum());
+  min_value_->value(minValue_);
+  min_value_->callback((Fl_Callback*)cb_min_value, this);
   max_value_ = new Fl_Input(0,0,0,0);
-  max_value_->value(maximum());
+  max_value_->value(maxValue_);
+  // max_value_->callback((Fl_Callback*)cb_max_value, this);
+}
+
+
+void Fl_Value_Range_Slider::on_min_value_changed()
+{
+  minValue_ = min_value_->dvalue();
+  value(minValue_);
+}
+
+void Fl_Value_Range_Slider::on_max_value_changed()
+{
+  maxValue_ = max_value_->dvalue();
 }
 
 void Fl_Value_Range_Slider::draw() {
