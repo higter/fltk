@@ -44,7 +44,11 @@ class FL_EXPORT Fl_Value_Range_Slider : public Fl_Slider {
 protected:
   void draw() override;
 
+  void draw_slider(int X, int Y, int W, int H);
+
   int handle(int event, int X, int Y, int W, int H);
+
+  void drag_move(double v);
 
 public:
   int handle(int) override;
