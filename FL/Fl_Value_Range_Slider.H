@@ -54,6 +54,8 @@ public:
   int handle(int) override;
   Fl_Value_Range_Slider(int x, int y, int w, int h, const char *l = 0);
 
+  virtual ~Fl_Value_Range_Slider();
+
   /** Gets the typeface of the text in the value box. */
   Fl_Font textfont() const { return textfont_; }
 

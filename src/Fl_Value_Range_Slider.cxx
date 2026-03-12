@@ -58,6 +58,12 @@ Fl_Value_Range_Slider::Fl_Value_Range_Slider(int X, int Y, int W, int H, const c
   max_value_->callback((Fl_Callback*)cb_max_value, this);
 }
 
+Fl_Value_Range_Slider::~Fl_Value_Range_Slider()
+{
+  delete min_value_;
+  delete max_value_;
+}
+
 
 void Fl_Value_Range_Slider::on_min_value_changed()
 {
