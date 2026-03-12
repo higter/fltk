@@ -132,15 +132,16 @@ public:
   double min_value() const { return minValue_; }
   double max_value() const { return maxValue_; }
 
-  void min_value(double val) {
-    minValue_ = val < minimum() ?  minimum() : (val > maxValue_ ? maxValue_ : val);  
-    min_value_->value(minValue_);
-  }
+  void minmax_value(double minval, double maxval)
+  {
+    double tmax = maxval > maxValue_ ? (maxval > maximum() ? maximum() : maxval) : maxValue_;
+    minValue_ = minval < minimum() ?  minimum() : (minval > tmax ? tmax : minval);  
+    maxValue_ = maxval > maximum() ?  maximum() : (maxval < minValue_ ? minValue_ : maxval);  
 
-  void max_value(double val) {
-    maxValue_ = val > maximum() ?  maximum() : (val < minValue_ ? minValue_ : val);  
+    min_value_->value(minValue_);
     max_value_->value(maxValue_);
   }
+
 
   void on_min_value_changed();
 

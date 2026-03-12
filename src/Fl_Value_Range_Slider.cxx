@@ -49,9 +49,11 @@ Fl_Value_Range_Slider::Fl_Value_Range_Slider(int X, int Y, int W, int H, const c
 
 
   min_value_ = new Fl_Input(0,0,0,0);
+  min_value_->input_type(FL_FLOAT_INPUT);
   min_value_->value(minValue_);
   min_value_->callback((Fl_Callback*)cb_min_value, this);
   max_value_ = new Fl_Input(0,0,0,0);
+  max_value_->input_type(FL_FLOAT_INPUT);
   max_value_->value(maxValue_);
   max_value_->callback((Fl_Callback*)cb_max_value, this);
 }
@@ -59,7 +61,7 @@ Fl_Value_Range_Slider::Fl_Value_Range_Slider(int X, int Y, int W, int H, const c
 
 void Fl_Value_Range_Slider::on_min_value_changed()
 {
-  min_value(min_value_->dvalue());
+  minmax_value(min_value_->dvalue(), maxValue_);
   min_value_->value(minValue_);
   value_damage();
   set_changed();
@@ -67,7 +69,7 @@ void Fl_Value_Range_Slider::on_min_value_changed()
 
 void Fl_Value_Range_Slider::on_max_value_changed()
 {
-  max_value(max_value_->dvalue());
+  minmax_value(minValue_, max_value_->dvalue());
   max_value_->value(maxValue_);
   value_damage();
   set_changed();
