@@ -296,62 +296,49 @@ int Fl_Value_Range_Slider::handle(int event, int X, int Y, int W, int H)
     int mx = (horizontal() ? Fl::event_x()-X : Fl::event_y()-Y);
     int minXX = int(value_to_position(min_value()) * ww + 0.5f);
     int maxXX = int(value_to_position(max_value()) * ww + 0.5f);
-    int S;
-    static int offcenter;
 
-    // if (type() == FL_HOR_FILL_SLIDER || type() == FL_VERT_FILL_SLIDER) 
+    static int lastVal;
+    if (event == FL_PUSH) 
     {
-
-      S = 0;
-      if (event == FL_PUSH) {
-        int xx = int(val*ww+.5);
-        offcenter = mx-xx;
-        if (offcenter < -10 || offcenter > 10) offcenter = 0;
-        else return 1;
-      }
-
-    } 
-
-    int xx = mx-offcenter;
-    double v = 0;
-    char tryAgain = 1;
-    while (tryAgain)
-    {
-      tryAgain = 0;
-      if (xx < 0) {
-        xx = 0;
-        offcenter = mx; if (offcenter < 0) offcenter = 0;
-      } else if (xx > (ww-S)) {
-        xx = ww-S;
-        offcenter = mx-xx; if (offcenter > S) offcenter = S;
-      }
-      // Convert position back to value using the appropriate scale
-      double pos = (ww-S) > 0 ? double(xx) / double(ww-S) : 0.0;
-      v = round(position_to_value(pos));
-      // make sure a click outside the sliderbar moves it:
-      if (event == FL_PUSH && v == value()) {
-        offcenter = S/2;
-        event = FL_DRAG;
-        tryAgain = 1;
-      }
+      lastVal = mx;
     }
-    // drag_move(clamp(v));
+    int newVal = mx; 
+    double v = 0.0;
+    double pos = (ww) > 0 ? double(lastVal) / double(ww) : 0.0;
+    double newpos = (ww) > 0 ? double(newVal) / double(ww) : 0.0;
+    v = int((position_to_value(newpos) -  position_to_value(pos))/ step()) * step();
+    if(fabs(v) > step())
+    {
+      lastVal = newVal;
+    }
+    else
+    {
+      v = 0.0;
+    }
+
+    drag_move(v, pushType);
     } return 1;
   case FL_RELEASE:
     handle_release();
     {
-      // int ww = (horizontal() ? W : H);
-      // int mx = (horizontal() ? Fl::event_x()-X : Fl::event_y()-Y);
-      // double pp = mx / double(ww);
-      // double v = position_to_value(pp);
-      // if(pushType == 1)
-      // {
-      //   min_value(v);
-      // }
-      // else if(pushType == 5)
-      // {
-      //   max_value(v);
-      // }
+      int ww = (horizontal() ? W : H);
+      int mx = (horizontal() ? Fl::event_x()-X : Fl::event_y()-Y);
+      double pp = mx / double(ww);
+      double v = int(position_to_value(pp) / step()) * step();
+      double minV = min_value();
+      double maxV = max_value();
+      if(pushType == 1)
+      {
+        minmax_value(v, maxV);
+        value_damage();
+        set_changed();
+      }
+      else if(pushType == 5)
+      {
+        minmax_value(minV, v);
+        value_damage();
+        set_changed();
+      }
     }
     return 1;
   case FL_KEYBOARD:
@@ -425,8 +412,22 @@ int Fl_Value_Range_Slider::handle(int event) {
                            sww - Fl::box_dw(box()), shh - Fl::box_dh(box()));
 }
 
-void Fl_Value_Range_Slider::drag_move(double v)
+void Fl_Value_Range_Slider::drag_move(double v, int type)
 {
+  if(type == 2)
+  {
+    minValue_+=v;
+    if(minValue_ < minimum())
+    {
+      minValue_ = minimum();
+    }
+    else if(minValue_ > maximum())
+    {
+      minValue_ = maximum();
+    }
+  }
+  else if(type == 3)
+  {
     double delVal = maxValue_ - minValue_;
     minValue_+=v;
     maxValue_+=v;
@@ -441,6 +442,19 @@ void Fl_Value_Range_Slider::drag_move(double v)
       maxValue_ = maximum();
       minValue_ = maxValue_ - delVal;
     }
+  }
+  else if(type == 4)
+  {
+    maxValue_+=v;
+    if(maxValue_ < minimum())
+    {
+      maxValue_ = minimum();
+    }
+    else if(maxValue_ > maximum())
+    {
+      maxValue_ = maximum();
+    }
+  }
 
     min_value_->value(minValue_);
     max_value_->value(maxValue_);

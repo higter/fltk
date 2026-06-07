@@ -48,7 +48,7 @@ protected:
 
   int handle(int event, int X, int Y, int W, int H);
 
-  void drag_move(double v);
+  void drag_move(double v, int type = 3);
 
 public:
   int handle(int) override;
