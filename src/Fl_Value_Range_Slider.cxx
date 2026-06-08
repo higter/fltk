@@ -179,11 +179,14 @@ void Fl_Value_Range_Slider::draw_slider(int X, int Y, int W, int H)
     //   box1 = FL_UP_BOX;
     // }
     {
-      if (wsl>0 && hsl>0) 
+      if (wsl>=0 && hsl>=0) 
       {
-        static int ss = 8;//(slider_size() * ww + 0.5f);
-        draw_box(FL_UP_BOX, xsl, ysl+hsl/2-ss/2, wsl, hsl-ss, selection_color());
-        static int slw = 4;
+        if(wsl)
+        {
+          static int ss = 8;//(slider_size() * ww + 0.5f);
+          draw_box(FL_UP_BOX, xsl, ysl+hsl/2-ss/2, wsl, hsl-ss, selection_color());
+        }
+        static int slw = 6;
         if(horizontal())
         {
           draw_box(FL_UP_BOX, xsl-slw/2, ysl, slw, hsl, FL_GRAY);
@@ -421,9 +424,9 @@ void Fl_Value_Range_Slider::drag_move(double v, int type)
     {
       minValue_ = minimum();
     }
-    else if(minValue_ > maximum())
+    if(minValue_ > maxValue_)
     {
-      minValue_ = maximum();
+      minValue_ = maxValue_;
     }
   }
   else if(type == 3)
@@ -446,11 +449,12 @@ void Fl_Value_Range_Slider::drag_move(double v, int type)
   else if(type == 4)
   {
     maxValue_+=v;
-    if(maxValue_ < minimum())
+    if(maxValue_ <minValue_)
     {
-      maxValue_ = minimum();
+      maxValue_ = minValue_;
     }
-    else if(maxValue_ > maximum())
+    
+    if(maxValue_ > maximum())
     {
       maxValue_ = maximum();
     }
