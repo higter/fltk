@@ -816,6 +816,15 @@ void Fl_Group::resize(int X, int Y, int W, int H) {
   Fl_Rect* p = bounds(); // save initial sizes and positions
 
   Fl_Widget::resize(X, Y, W, H); // make new xywh values visible for children
+  {
+    Fl_Image* oldimage = image();
+    if(oldimage)
+    {
+      Fl_Image* scaled = oldimage->copy(w(), h());
+      image(scaled);
+      delete oldimage;
+    }
+  }
 
   // Part 1: no resizable() or both width and height didn't change,
   // just move the children.
