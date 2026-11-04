@@ -2281,8 +2281,9 @@ void Fl_WinAPI_Window_Driver::makeWindow() {
       // Thin border and title bar
       case 1:
         style |= WS_DLGFRAME | WS_CAPTION;
-        if (!w->modal())
-          style |= WS_SYSMENU | WS_MINIMIZEBOX;
+        // if (!w->modal())
+          style |= WS_SYSMENU;
+          // style |= WS_SYSMENU | WS_MINIMIZEBOX;
         break;
 
       // Thick, resizable border and title bar, with maximize button
